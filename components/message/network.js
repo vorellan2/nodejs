@@ -1,6 +1,6 @@
 const express = require('express');
 const response = require('../../network/response.js')
-
+const controller = require('./controller');
 const router = express.Router();
 
 router.get('/', function(req,res){
@@ -20,6 +20,13 @@ router.post('/', function(req,res){
     console.log(req.body);
     //res.status(201).send({error:'', body:'creado correctamente'});
     
+    controller.addMessage(req.body.user, req.body.message)
+        .then(() => {
+            response.success(req, res, 'Creado correctamente', 201);
+        })
+        .catch(e => {
+            response.error(req, res, 'Informacion invalida', 400, 'Error en el controller');
+        });
 
     if (req.query.error == "ok"){
 
